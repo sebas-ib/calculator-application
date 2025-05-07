@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Financial Calculator Web App
 
-## Getting Started
+## Overview
+This is a full-stack, Dockerized web application that provides three interactive financial calculators, hosted on Railway. The calculators include:
 
-First, run the development server:
+Mortgage Calculator – Monthly payment breakdown
+Income Tax Calculator – Estimates federal tax and effective tax rate
+401(k) Retirement Calculator – Projects future retirement savings
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Live Demo
+Deployed on Railway: https://calculator-application-production.up.railway.app
+
+### Tech Stack
+- Frontend: React (Next.js) + Tailwind CSS
+- Backend: Python + Flask
+- Charting: Chart.js via react-chartjs-2
+- Containerization: Docker
+- Hosting: Railway
+- Port: 5001 (internal and external)
+
+### Features
+- Three calculators 
+- Pie/Bar chart toggle 
+- Form validation 
+- Print/export support 
+- Flask API handles calculations 
+- Single Docker container deployment
+
+### How to Run Locally
+
+1. Clone the repository
+```
+git clone https://github.com/YOUR_USERNAME/financial-calculator.git
+cd financial-calculator
+```
+2. Build and run with Docker
+```
+docker build -t financial-calculator .
+docker run -p 5001:5001 financial-calculator
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Access the app: http://localhost:5001
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Folder Structure
+```
+.
+├── backend/
+│   ├── main.py               # Flask app
+│   └── requirements.txt      # Python deps
+├── frontend/
+│   ├── src/app/              # Next.js pages
+│   ├── out/                  # Built static export
+├── Dockerfile
+```
+### Project Scope
+This project satisfies the "Extended Coverage" condition:
+- Includes 3 financial calculators 
+- Dockerized and hosted on Railway 
+- Serves frontend and backend via a single container
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
