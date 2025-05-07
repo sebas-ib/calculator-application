@@ -9,9 +9,12 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install Flask + dependencies
+# Install system dependencies
+RUN apt-get update && apt-get install -y build-essential
+
+# Install Python dependencies
 COPY backend/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy Flask backend
 COPY backend/ ./backend
@@ -19,8 +22,11 @@ COPY backend/ ./backend
 # Copy built frontend static files
 COPY --from=frontend-builder /app/frontend/out ./frontend/out
 
-# Flask will serve the frontend
+# Set environment variables
 ENV FLASK_APP=backend/main.py
+
+# Expose port (for local reference)
 EXPOSE 5001
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5001"]
+# Run using Gunicorn and dynamic port from Railway
+CMD ["gunicorn", "-b", "0.0.0.0:${PORT}", "backend.main:app"]
