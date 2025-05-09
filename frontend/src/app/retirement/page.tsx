@@ -39,7 +39,7 @@ export default function RetirementCalculator() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/401k', {
+      const res = await fetch('/api/401k', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

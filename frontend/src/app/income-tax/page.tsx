@@ -37,7 +37,7 @@ export default function IncomeTaxCalculator() {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5001/api/income-tax', {
+      const res = await fetch('/api/income-tax', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
