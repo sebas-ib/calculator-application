@@ -150,6 +150,7 @@ def serve_frontend(path):
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5001))  # Use $PORT from Railway, default to 5001
+    raw_port = os.environ.get("PORT", "5001")
+    port = int(raw_port) if raw_port.strip() else 5001  # Use $PORT from Railway, default to 5001
     app.run(host="0.0.0.0", port=port, debug=False)
 

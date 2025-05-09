@@ -29,4 +29,4 @@ ENV FLASK_APP=backend/main.py
 EXPOSE 5001
 
 # Run using Gunicorn and dynamic port from Railway
-CMD ["sh", "-c", "gunicorn -b 0.0.0.0:$PORT backend.main:app"]
+CMD ["sh", "-c", "gunicorn -b 0.0.0.0:${PORT:-5001} backend.main:app"]
