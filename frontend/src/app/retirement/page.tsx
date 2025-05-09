@@ -67,20 +67,36 @@ export default function RetirementCalculator() {
   const fromCurrent = result?.fromCurrentBalance || 0;
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-[#f9f9f9] px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-sm w-full max-w-5xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white px-4 py-12">
+      <div className="bg-[#1e1e1e] rounded-2xl shadow-lg w-full max-w-5xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Form */}
         <div>
           <h2 className="text-2xl font-semibold text-center lg:text-left mb-6">401(k) Retirement Calculator</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input name="currentBalance" placeholder="Current Balance ($)" type="number" value={form.currentBalance} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <input name="contribution" placeholder="Monthly Contribution ($)" type="number" value={form.contribution} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <input name="years" placeholder="Years to Retirement" type="number" value={form.years} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <input name="returnRate" placeholder="Annual Return Rate (%)" type="number" value={form.returnRate} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <input name="salary" placeholder="Annual Salary ($)" type="number" value={form.salary} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <input name="matchPercent" placeholder="Employer Match (%)" type="number" value={form.matchPercent} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <input name="maxMatchPercent" placeholder="Employer Max Match (% of salary)" type="number" value={form.maxMatchPercent} onChange={handleChange} className="w-full p-3 rounded-lg border border-gray-300" required />
-            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">
+            {[
+              { name: 'currentBalance', label: 'Current Balance ($)' },
+              { name: 'contribution', label: 'Monthly Contribution ($)' },
+              { name: 'years', label: 'Years to Retirement' },
+              { name: 'returnRate', label: 'Annual Return Rate (%)' },
+              { name: 'salary', label: 'Annual Salary ($)' },
+              { name: 'matchPercent', label: 'Employer Match (%)' },
+              { name: 'maxMatchPercent', label: 'Employer Max Match (% of salary)' },
+            ].map((field) => (
+              <input
+                key={field.name}
+                name={field.name}
+                placeholder={field.label}
+                type="number"
+                value={(form as any)[field.name]}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[#2a2a2a] text-white border border-gray-600"
+                required
+              />
+            ))}
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+            >
               {loading ? 'Calculating...' : 'Calculate'}
             </button>
             {error && <p className="text-red-500 text-sm pt-2">{error}</p>}
@@ -89,7 +105,7 @@ export default function RetirementCalculator() {
 
         {/* Results & Chart */}
         <div className="flex flex-col items-center justify-between space-y-6">
-          <div className="text-center text-gray-800 space-y-2">
+          <div className="text-center space-y-2">
             <p>Total Projected Savings: <strong>${total.toFixed(2)}</strong></p>
             <p>From Contributions + Employer Match: <strong>${fromContributions.toFixed(2)}</strong></p>
             <p>From Current Balance Growth: <strong>${fromCurrent.toFixed(2)}</strong></p>
@@ -97,12 +113,22 @@ export default function RetirementCalculator() {
 
           <div className="w-full max-w-sm space-y-4">
             <div className="flex justify-center gap-4 items-center">
-              <label htmlFor="chartType" className="text-sm text-gray-600">Chart Type:</label>
-              <select id="chartType" value={chartType} onChange={(e) => setChartType(e.target.value as 'pie' | 'bar')} className="p-2 border rounded text-sm">
+              <label htmlFor="chartType" className="text-sm text-gray-300">Chart Type:</label>
+              <select
+                id="chartType"
+                value={chartType}
+                onChange={(e) => setChartType(e.target.value as 'pie' | 'bar')}
+                className="p-2 bg-[#2a2a2a] text-white border border-gray-600 rounded text-sm"
+              >
                 <option value="pie">Pie</option>
                 <option value="bar">Bar</option>
               </select>
-              <button onClick={() => window.print()} className="ml-2 text-sm px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded">Print</button>
+              <button
+                onClick={() => window.print()}
+                className="ml-2 text-sm px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
+              >
+                Print
+              </button>
             </div>
 
             {result && chartType === 'pie' && (
@@ -113,7 +139,7 @@ export default function RetirementCalculator() {
                     {
                       data: [fromContributions, fromCurrent],
                       backgroundColor: ['#3b82f6', '#10b981'],
-                      borderColor: '#fff',
+                      borderColor: '#2a2a2a',
                       borderWidth: 1,
                     },
                   ],
@@ -133,15 +159,21 @@ export default function RetirementCalculator() {
                     },
                   ],
                 }}
-                options={{ scales: { y: { beginAtZero: true } } }}
+                options={{
+                  scales: {
+                    y: { beginAtZero: true, ticks: { color: 'white' } },
+                    x: { ticks: { color: 'white' } },
+                  },
+                  plugins: { legend: { labels: { color: 'white' } } },
+                }}
               />
             )}
           </div>
 
           <div className="pt-6 flex flex-wrap justify-center gap-3 print:hidden">
-            <a href="/" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Back to Home</a>
-            <a href="/mortgage" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Mortgage</a>
-            <a href="/income-tax" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Income Tax</a>
+            <a href="/" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Back to Home</a>
+            <a href="/mortgage" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Mortgage</a>
+            <a href="/income-tax" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Income Tax</a>
           </div>
         </div>
       </div>

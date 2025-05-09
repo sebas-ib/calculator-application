@@ -64,8 +64,8 @@ export default function IncomeTaxCalculator() {
   const rate = result?.effectiveRate || 0;
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-[#f9f9f9] px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-sm w-full max-w-5xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white px-4 py-12">
+      <div className="bg-[#1e1e1e] rounded-2xl shadow-lg w-full max-w-5xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Form */}
         <div>
           <h2 className="text-2xl font-semibold text-center lg:text-left mb-6">Income Tax Calculator</h2>
@@ -74,44 +74,31 @@ export default function IncomeTaxCalculator() {
               name="filingStatus"
               value={form.filingStatus}
               onChange={handleChange}
-              className="w-full p-3 rounded-lg border border-gray-300"
+              className="w-full p-3 rounded-lg bg-[#2a2a2a] text-white border border-gray-600"
             >
               <option value="single">Single</option>
               <option value="married">Married Filing Jointly</option>
             </select>
-            <input
-              type="number"
-              name="income"
-              placeholder="Base Salary ($)"
-              value={form.income}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg border border-gray-300"
-              required
-            />
-            <input
-              type="number"
-              name="otherIncome"
-              placeholder="Other Income ($)"
-              value={form.otherIncome}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg border border-gray-300"
-            />
-            <input
-              type="number"
-              name="deductions"
-              placeholder="Deductions ($)"
-              value={form.deductions}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg border border-gray-300"
-            />
-            <input
-              type="number"
-              name="taxCredits"
-              placeholder="Tax Credits ($)"
-              value={form.taxCredits}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg border border-gray-300"
-            />
+            {['income', 'otherIncome', 'deductions', 'taxCredits'].map((field) => (
+              <input
+                key={field}
+                type="number"
+                name={field}
+                placeholder={
+                  field === 'income'
+                    ? 'Base Salary ($)'
+                    : field === 'otherIncome'
+                    ? 'Other Income ($)'
+                    : field === 'deductions'
+                    ? 'Deductions ($)'
+                    : 'Tax Credits ($)'
+                }
+                value={(form as any)[field]}
+                onChange={handleChange}
+                className="w-full p-3 rounded-lg bg-[#2a2a2a] text-white border border-gray-600"
+                required={field === 'income'}
+              />
+            ))}
             <button
               type="submit"
               className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
@@ -124,7 +111,7 @@ export default function IncomeTaxCalculator() {
 
         {/* Results & Chart */}
         <div className="flex flex-col items-center justify-between space-y-6">
-          <div className="text-center text-gray-800 space-y-2">
+          <div className="text-center space-y-2">
             <p>Gross Income: <strong>${gross.toFixed(2)}</strong></p>
             <p>Taxable Income: <strong>${taxable.toFixed(2)}</strong></p>
             <p>Total Tax: <strong>${tax.toFixed(2)}</strong></p>
@@ -133,19 +120,19 @@ export default function IncomeTaxCalculator() {
 
           <div className="w-full max-w-sm space-y-4">
             <div className="flex justify-center gap-4 items-center">
-              <label htmlFor="chartType" className="text-sm text-gray-600">Chart Type:</label>
+              <label htmlFor="chartType" className="text-sm text-gray-300">Chart Type:</label>
               <select
                 id="chartType"
                 value={chartType}
                 onChange={(e) => setChartType(e.target.value as 'pie' | 'bar')}
-                className="p-2 border rounded text-sm"
+                className="p-2 bg-[#2a2a2a] text-white border border-gray-600 rounded text-sm"
               >
                 <option value="pie">Pie</option>
                 <option value="bar">Bar</option>
               </select>
               <button
                 onClick={() => window.print()}
-                className="ml-2 text-sm px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+                className="ml-2 text-sm px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
               >
                 Print
               </button>
@@ -159,7 +146,7 @@ export default function IncomeTaxCalculator() {
                     {
                       data: [tax, gross - tax],
                       backgroundColor: ['#ef4444', '#10b981'],
-                      borderColor: '#fff',
+                      borderColor: '#2a2a2a',
                       borderWidth: 1,
                     },
                   ],
@@ -179,15 +166,15 @@ export default function IncomeTaxCalculator() {
                     },
                   ],
                 }}
-                options={{ scales: { y: { beginAtZero: true } } }}
+                options={{ scales: { y: { beginAtZero: true, ticks: { color: 'white' } }, x: { ticks: { color: 'white' } } }, plugins: { legend: { labels: { color: 'white' } } } }}
               />
             )}
           </div>
 
           <div className="pt-6 flex flex-wrap justify-center gap-3 print:hidden">
-            <a href="/" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Back to Home</a>
-            <a href="/mortgage" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Mortgage</a>
-            <a href="/retirement" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Retirement</a>
+            <a href="/" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Back to Home</a>
+            <a href="/mortgage" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Mortgage</a>
+            <a href="/retirement" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Retirement</a>
           </div>
         </div>
       </div>

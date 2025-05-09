@@ -47,10 +47,7 @@ export default function MortgageCalculator() {
       });
 
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to get result');
-      }
+      if (!response.ok) throw new Error(data.error || 'Failed to get result');
 
       setResult(data);
     } catch (err: any) {
@@ -71,13 +68,11 @@ export default function MortgageCalculator() {
   const percent = (val: number) => total > 0 ? ((val / total) * 100).toFixed(1) : '0.0';
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-[#f9f9f9] px-4 py-12">
-      <div className="bg-white rounded-2xl shadow-sm w-full max-w-6xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10 print:grid-cols-1 print:max-w-full">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-[#121212] text-white px-4 py-12">
+      <div className="bg-[#1e1e1e] rounded-2xl shadow-lg w-full max-w-6xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10 print:grid-cols-1 print:max-w-full">
         {/* Form Section */}
         <div>
-          <h2 className="text-2xl font-semibold text-center lg:text-left mb-6">
-            Mortgage Calculator
-          </h2>
+          <h2 className="text-2xl font-semibold text-center lg:text-left mb-6">Mortgage Calculator</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             {[
               { name: 'homePrice', label: 'Home Price' },
@@ -95,7 +90,7 @@ export default function MortgageCalculator() {
                 type="number"
                 value={(form as any)[field.name]}
                 onChange={handleChange}
-                className="w-full p-3 rounded-lg border border-gray-300"
+                className="w-full p-3 rounded-lg bg-[#2a2a2a] text-white border border-gray-600"
                 required
               />
             ))}
@@ -111,35 +106,31 @@ export default function MortgageCalculator() {
 
         {/* Results + Chart Section */}
         <div className="flex flex-col items-center justify-between space-y-6">
-          <div className="space-y-2 text-center text-gray-800">
+          <div className="space-y-2 text-center">
             <h3 className="text-lg font-semibold">Monthly Breakdown</h3>
             <p>Loan Payment: <strong>${displayData.loan.toFixed(2)}</strong> ({percent(displayData.loan)}%)</p>
             <p>Property Tax: <strong>${displayData.tax.toFixed(2)}</strong> ({percent(displayData.tax)}%)</p>
             <p>Insurance: <strong>${displayData.insurance.toFixed(2)}</strong> ({percent(displayData.insurance)}%)</p>
             <p>HOA Fees: <strong>${displayData.hoa.toFixed(2)}</strong> ({percent(displayData.hoa)}%)</p>
-            <hr className="my-2" />
-            <p className="text-lg font-semibold">
-              Total: <strong>${total.toFixed(2)}</strong>
-            </p>
+            <hr className="my-2 border-gray-600" />
+            <p className="text-lg font-semibold">Total: <strong>${total.toFixed(2)}</strong></p>
           </div>
 
           <div className="w-full max-w-sm space-y-4">
             <div className="flex justify-center gap-4 items-center">
-              <label htmlFor="chartType" className="text-sm text-gray-600">
-                Chart Type:
-              </label>
+              <label htmlFor="chartType" className="text-sm text-gray-300">Chart Type:</label>
               <select
                 id="chartType"
                 value={chartType}
                 onChange={(e) => setChartType(e.target.value as 'pie' | 'bar')}
-                className="p-2 border rounded text-sm"
+                className="p-2 bg-[#2a2a2a] text-white border border-gray-600 rounded text-sm"
               >
                 <option value="pie">Pie</option>
                 <option value="bar">Bar</option>
               </select>
               <button
                 onClick={() => window.print()}
-                className="ml-2 text-sm px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
+                className="ml-2 text-sm px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
               >
                 Print
               </button>
@@ -153,7 +144,7 @@ export default function MortgageCalculator() {
                     {
                       data: [displayData.loan, displayData.tax, displayData.insurance, displayData.hoa],
                       backgroundColor: ['#3b82f6', '#10b981', '#facc15', '#f97316'],
-                      borderColor: '#fff',
+                      borderColor: '#2a2a2a',
                       borderWidth: 1,
                     },
                   ],
@@ -171,16 +162,22 @@ export default function MortgageCalculator() {
                     },
                   ],
                 }}
-                options={{ scales: { y: { beginAtZero: true } } }}
+                options={{
+                  scales: {
+                    y: { beginAtZero: true, ticks: { color: 'white' } },
+                    x: { ticks: { color: 'white' } },
+                  },
+                  plugins: { legend: { labels: { color: 'white' } } },
+                }}
               />
             )}
           </div>
 
           {/* Navigation Buttons */}
           <div className="pt-6 flex flex-wrap justify-center gap-3 print:hidden">
-            <a href="/" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Back to Home</a>
-            <a href="/income-tax" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Income Tax</a>
-            <a href="/retirement" className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Retirement</a>
+            <a href="/" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Back to Home</a>
+            <a href="/income-tax" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Income Tax</a>
+            <a href="/retirement" className="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition">Retirement</a>
           </div>
         </div>
       </div>
